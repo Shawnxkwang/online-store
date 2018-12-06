@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <%= csrf_meta_tags %>
+  <title>Store</title>
+  <%= stylesheet_link_tag    'application', media: 'all', 'data-turbolinks-track' => true %>
+  <%= javascript_include_tag 'application', 'data-turbolinks-track' => true %>
+</head>
+<body class='<%= controller.controller_name %>'>
+
+  <div id="banner">
+    <%= @page_title || "Our Products" %>
+    <p>
+      Please use the following username and password to test this application
+    </p>
+    <p>
+      user name: assignment3
+      <br />
+      password: newpassword
+    </p>
+  </div>
+  <div id="columns">
+    <div id="side">
+      <div id='cart'>
+        <%= render @cart%>
+      </div>
+      <ul>
+        <li><a href="/shopper">Home</a></li>
+        <li><a href="/navs/faq">Questions</a></li>
+        <li><a href="/navs/news">News</a></li>
+        <li><a href="/navs/contact">Contact</a></li>
+        <li><a href="/search/index">Search</a></li>
+        <%= button_to 'Login', login_path%>
+      </ul>
+      <% if session[:user_id] %>
+        Hello, <%= User.find_by(id: session[:user_id]).name%>
+        <ul>
+          <li><%= link_to 'Orders',orders_path %></li>
+          <li><%= link_to 'Products', products_path %></li>
+          <li><%= link_to 'Users',    users_path    %></li>
+        </ul>
+        <%= button_to 'Logout', logout_path%>
+      <% end %>
+    </div>
+    <div id="main">
+      <%= yield %>
+    </div>
+  </div>
+</body>
+</html>

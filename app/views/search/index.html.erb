@@ -1,0 +1,46 @@
+<h1>Search item</h1>
+
+<%= form_tag do %>
+  <fieldset>
+    <legend>Please Search</legend>
+    <div>
+      <%= label_tag :name, 'Name:' %>
+      <%= text_field_tag :name, params[:name] %>
+    </div>
+    <div>
+      <%= label_tag :description, 'description:' %>
+      <%= text_field_tag :description, params[:description] %>
+    </div>
+    <div>
+      <%= label_tag :price, 'price:' %>
+      <%= text_field_tag :price, params[:price] %>
+    </div>
+    <div>
+      <%= submit_tag "Search" %>
+    </div>
+  </fieldset>
+  <% end %>
+  <% if params[:name] == nil && params[:description] ==nil&& params[:price] == nil%>
+    <%params[:name] = ""%>
+    <%params[:description] = ""%>
+    <%params[:price] = ""%>
+  <%end%>
+  <% @searchProducts = Product.where('name like ? and description like ? and price like ?', "%"+params[:name]+"%", "%"+params[:description]+"%", "%"+params[:price]+"%").all.order(:name) %>
+  <% @searchProducts.each do |product| %>
+    <div class="entry">
+      <%= image_tag(product.image) %>
+      <h3><%= product.name %></h3>
+      <div class="price_line">
+        <%= sanitize(product.description) %>
+      </div>
+      <div class="price_line">
+        <br />
+        <span class="price">
+          <%= number_to_currency(product.price) %>
+        </span>
+        <%= button_to'Add to Cart', lineitems_path(product_id: product), class: 'add_to_cart', remote: true %>
+      </div>
+    </div>
+  <% end %>
+
+<%= link_to 'Back', shopper_path %>
